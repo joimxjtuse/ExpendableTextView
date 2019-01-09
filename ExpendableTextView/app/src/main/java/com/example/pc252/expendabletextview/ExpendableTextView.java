@@ -37,6 +37,7 @@ public class ExpendableTextView extends TextView implements View.OnTouchListener
         super(context, attrs, defStyleAttr);
         init();
     }
+
     private void init(){
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.setOnTouchListener(this);
@@ -50,7 +51,11 @@ public class ExpendableTextView extends TextView implements View.OnTouchListener
         Log.d("zhangrui","height="+height+"///width="+width);
         if(width != 0 && height != 0){
             paint.setColor(Color.BLACK);
-            canvas.drawCircle(width-13,13,13,paint);
+            if(isExpend) {
+                canvas.drawCircle(width - 13, 13, 13, paint);
+            }else{
+                canvas.drawCircle(width - 13, height-13, 13, paint);
+            }
         }
     }
 
@@ -61,6 +66,7 @@ public class ExpendableTextView extends TextView implements View.OnTouchListener
         defaultHeight = measureChangDu(100,heightMeasureSpec);
         setMeasuredDimension(defaultWidth,defaultHeight);
     }
+
     private int measureChangDu(int defaultWidth, int measureSpec) {
 
         int specMode = MeasureSpec.getMode(measureSpec);
@@ -90,22 +96,24 @@ public class ExpendableTextView extends TextView implements View.OnTouchListener
         float x = event.getX();
         float y = event.getY();
         boolean iseable=false;
-        if((x-v.getTranslationX()) > (getWidth()-20) && (x-v.getTranslationX()) < getWidth() && (y-v.getTranslationY()) >0 && (y-v.getTranslationY()) < 20){
-            iseable = true;
+        if(isExpend) {
+            if ((x - v.getTranslationX()) > (getWidth() - 20) && (x - v.getTranslationX()) < getWidth() && (y - v.getTranslationY()) > 0 && (y - v.getTranslationY()) < 20) {
+                iseable = true;
+            }
+        }else {
+            if ((x - v.getTranslationX()) > (getWidth() - 20) && (x - v.getTranslationX()) < getWidth() && (y - v.getTranslationY()) > getHeight()-20 && (y - v.getTranslationY()) < getHeight()) {
+                iseable = true;
+            }
         }
-        Log.d("zhangrui","iseable="+iseable);
+
         if(event.getAction() == MotionEvent.ACTION_DOWN && iseable){
             if(isExpend) {
-                Log.d("zhangrui", "nonono" + defaultHeight);
                 ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(defaultWidth, defaultHeight * 3);
-                this.setLayoutParams(params);
-                Log.d("zhangrui", "nonono" + defaultHeight);
+                v.setLayoutParams(params);
                 isExpend = false;
             }else {
-                Log.d("zhangrui", "nonono" + defaultHeight);
                 ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(defaultWidth, defaultHeight / 3);
-                this.setLayoutParams(params1);
-                Log.d("zhangrui", "nonono" + defaultHeight);
+                v.setLayoutParams(params1);
                 isExpend = true;
             }
             postInvalidate();
