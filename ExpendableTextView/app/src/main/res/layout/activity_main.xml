@@ -10,6 +10,10 @@
         android:id="@+id/expendableTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="测\n试\n文\n字，\n自\n定\n义\nview"/>
+        android:text="飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四
+飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四
+飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四
+飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四
+飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四飞虎队给肥肉脚脖子四"/>
 
 </android.support.constraint.ConstraintLayout>
