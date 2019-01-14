@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 public class ExpendableTextView extends TextView implements View.OnTouchListener{
     Paint paint;
+    Path path;
     private int defaultWidth =0;
     private int defaultHeight =0;
     private int defaultLineWordsNum =11;//WRAP_CONTENT模式下一行显示多少个字符
@@ -41,6 +43,7 @@ public class ExpendableTextView extends TextView implements View.OnTouchListener
 
     private void init(){
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        path = new Path();
         this.setOnTouchListener(this);
     }
 
@@ -53,9 +56,19 @@ public class ExpendableTextView extends TextView implements View.OnTouchListener
         if(width != 0 && height != 0){
             paint.setColor(Color.BLACK);
             if(isExpend) {
-                canvas.drawCircle(width - 13, 13, 13, paint);
+//                canvas.drawCircle(width - 13, 13, 13, paint);
+                path.reset();
+                path.moveTo(width - 18, 0);
+                path.lineTo(width - 9, 9);
+                path.lineTo(width,0);
+                canvas.drawPath(path, paint);
             }else{
-                canvas.drawCircle(width - 13, height-13, 13, paint);
+//                canvas.drawCircle(width - 13, height-13, 13, paint);
+                path.reset();
+                path.moveTo(width - 18, height);
+                path.lineTo(width - 9, height-9);
+                path.lineTo(width,height);
+                canvas.drawPath(path, paint);
             }
         }
     }
@@ -65,6 +78,8 @@ public class ExpendableTextView extends TextView implements View.OnTouchListener
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         defaultWidth = measureKuanDu((int)(defaultLineWordsNum*getTextSize()),widthMeasureSpec);
         defaultHeight = measureChangDu((int)(getTextSize()+5)*3,heightMeasureSpec);
+        Log.e("zhangrui", "---defaultHeight = " + defaultHeight + "");
+        Log.e("zhangrui", "---(int)(getTextSize()+5)*3 = " + (int)(getTextSize()+5)*3 + "");
         setMeasuredDimension(defaultWidth,defaultHeight);
     }
 
@@ -72,21 +87,14 @@ public class ExpendableTextView extends TextView implements View.OnTouchListener
 
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
-//        Log.e("zhangrui", "---speSize = " + specSize + "");
-//        Log.d("zhangrui","line Num="+getLineCount());
-
-
         switch (specMode) {
             case MeasureSpec.AT_MOST:
                 defaultWidth = Math.min(defaultWidth, specSize);
-//                Log.e("zhangrui", "---speMode = AT_MOST");
                 break;
             case MeasureSpec.EXACTLY:
-//                Log.e("zhangrui", "---speMode = EXACTLY");
                 defaultWidth = specSize;
                 break;
             case MeasureSpec.UNSPECIFIED:
-//                Log.e("zhangrui", "---speMode = UNSPECIFIED");
                 defaultWidth = Math.min(defaultWidth, specSize);
         }
         return defaultWidth;
@@ -96,18 +104,19 @@ public class ExpendableTextView extends TextView implements View.OnTouchListener
 
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
-        Log.e("zhangrui", "---speSize = " + specSize + "");
+
        Log.d("zhangrui","line Num="+getLineCount());
 
 
         switch (specMode) {
             case MeasureSpec.AT_MOST:
                 defaultWidth = Math.min(defaultWidth, specSize);
-                Log.e("zhangrui", "---changdu = AT_MOST");
+                Log.e("zhangrui", "---changdu = AT_MOST"+specSize);
                 break;
             case MeasureSpec.EXACTLY:
-                Log.e("zhangrui", "---changdu = EXACTLY");
-                defaultWidth = specSize;
+                if(isExpend) defaultWidth = (int)(getTextSize()+5)*3;
+                else defaultWidth = (int)(getTextSize()+5)*getLineCount();
+                Log.e("zhangrui", "---changdu = EXACTLY"+specSize);
                 break;
             case MeasureSpec.UNSPECIFIED:
                 Log.e("zhangrui", "---changdu = UNSPECIFIED");
